@@ -79,6 +79,8 @@ impl AoCDay for Day03 {
 					None => wordlen = Some(w.len()),
 					Some(r) => assert_eq!(r, w.len()),
 				};
+
+				// will return Err if number is too big for usize
 				usize::from_str_radix(w, 2)	
 			})
 			.collect();
