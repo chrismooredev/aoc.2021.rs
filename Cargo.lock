@@ -46,13 +46,14 @@ dependencies = [
 
 [[package]]
 name = "aoch"
-version = "0.3.2"
-source = "git+https://github.com/csm123199/aochelper#b909ba59a8941be0554bc21cc3870be14314bf9e"
+version = "0.3.3"
+source = "git+https://github.com/csm123199/aochelper#3c3d7171113e9f0a1f01d0c02c51506afeaf445a"
 dependencies = [
  "atty",
  "cargo-edit",
  "clap 3.0.0-beta.5",
  "colored",
+ "git2",
  "ptree",
  "toml_edit",
 ]
@@ -560,9 +561,9 @@ checksum = "e2abad23fbc42b3700f2f279844dc832adb2b2eb069b2df918f455c4e18cc646"
 
 [[package]]
 name = "libc"
-version = "0.2.108"
+version = "0.2.109"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8521a1b57e76b1ec69af7599e75e38e7b7fad6610f037db8c79b127201b5d119"
+checksum = "f98a04dce437184842841303488f70d0188c5f51437d2a834dc097eafa909a01"
 
 [[package]]
 name = "libgit2-sys"
