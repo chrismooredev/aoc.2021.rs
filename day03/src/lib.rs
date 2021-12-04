@@ -13,24 +13,14 @@ pub struct Day03 {
 	wordlen: usize,
 }
 impl Day03 {
+	/// Figure out the most common bit in a 'column' of integers
 	fn common_bit(words: &[usize], bit_index: usize) -> Ordering {
 		let set_count = words.iter()
 			.filter(|&&w| w & (1 << bit_index) != 0)
 			.count();
 		
 		let half = (words.len()+1)/2; // ensure we round up, if applicable
-		let ord = set_count.cmp(&half);
-		println!("common_bit(words_len={}, bi={}) = {:?} than half set ({} total (words.len()/2 => {}))", words.len(), bit_index, ord, set_count, half);
-		ord
-	}
-
-	/// low bits at `commonalities()[0]`
-	/// 
-	/// `Ordering::Greater` if more 1s
-	fn commonalities(words: &[usize], wordlen: usize) -> Vec<Ordering> {
-		(0..wordlen)
-			.map(|bi| Day03::common_bit(words, bi))
-			.collect()
+		set_count.cmp(&half)
 	}
 
 	fn get_rating(&self, typ: BitCriteria) -> usize {
@@ -38,12 +28,11 @@ impl Day03 {
 	
 		for bi in (0..self.wordlen).rev() {
 			// get the commonality for this bit
-			let ord = Day03::common_bit(&candidates, bi);
-			let tgt = typ.should_be_set(ord);
+			let target_state = typ.should_be_set(Day03::common_bit(&candidates, bi));
 
 			// explicitly drop before end of scope so length break check works properly
 			let _ = candidates.drain_filter(|&mut word| {
-				(word & (1 << bi) != 0) != tgt
+				(word & (1 << bi) != 0) != target_state
 			});
 
 			if candidates.len() == 1 {
@@ -68,36 +57,10 @@ impl BitCriteria {
 		use BitCriteria::*;
 		use Ordering::*;
 
-		// from karnaugh map
-		// http://www.32x8.com/sop3_____A-B-C_____m_0-3-6-7___________option-0_____999780977071894883684
-
-		let is_equal = matches!(commonality, Equal); // a
-		let is_oxy = matches!(self, Oxygen); // b
-		let is_greater = matches!(commonality, Greater); // c
-		let alt = (is_oxy && (is_greater || is_equal)) || (!is_oxy && !is_equal && !is_greater);
-
-		// derived from above
-		let alt2 = match self {
+		match self {
 			Oxygen => matches!(commonality, Greater | Equal),
 			Co2 => matches!(commonality, Less)
-		};
-
-		// reference/"brute force"
-		let orig = match (self, commonality) {
-			(Oxygen, Equal) => true,
-			(Co2, Equal) => false,
-
-			(Oxygen, Greater) => true,
-			(Oxygen, Less) => false,
-
-			(Co2, Greater) => false,
-			(Co2, Less) => true,
-		};
-
-		assert_eq!(orig, alt);
-		assert_eq!(orig, alt2);
-
-		orig
+		}
 	}
 }
 
@@ -108,7 +71,6 @@ impl AoCDay for Day03 {
 	fn name() -> &'static str { "Binary Diagnostic" }
 
 	fn parse(input: &str) -> DayResult<Self> {
-
 		let mut wordlen: Option<usize> = None;
 		let raw: Result<Vec<usize>, ParseIntError> = input.lines()
 			.filter_map(aoch::parsing::trimmed)
@@ -131,8 +93,9 @@ impl AoCDay for Day03 {
 		})
 	}
 	fn part1(&mut self) -> DayResult<Self::Answer> {
-		let bit_commonality = Day03::commonalities(&self.words, self.wordlen);
-		println!("bit_commonality: {:?}", bit_commonality);
+		let bit_commonality: Vec<Ordering> = (0..self.wordlen)
+			.map(|bi| Day03::common_bit(&self.words, bi))
+			.collect();
 
 		let gamma = bit_commonality.iter().enumerate()
 			.fold(0, |gamma, (bi, bo)| {
