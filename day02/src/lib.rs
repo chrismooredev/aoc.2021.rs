@@ -112,16 +112,6 @@ impl AoCDay for Day02 {
 	}
 }
 
-/*
-#[test]
-fn fuel_calc() {
-	let cases = [
-		(100756, 33583),
-	];
-	run_test(|n| DayMe::calc_fuel(*n), &cases);
-}
-*/
-
 #[cfg(test)]
 const TEST_INPUT: &'static str = "
 forward 5
