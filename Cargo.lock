@@ -46,8 +46,8 @@ dependencies = [
 
 [[package]]
 name = "aoch"
-version = "0.3.3"
-source = "git+https://github.com/csm123199/aochelper#3c3d7171113e9f0a1f01d0c02c51506afeaf445a"
+version = "0.3.4"
+source = "git+https://github.com/csm123199/aochelper#291b92177f9a5a15ef545f83567b6749573c2b9c"
 dependencies = [
  "atty",
  "cargo-edit",
@@ -55,6 +55,7 @@ dependencies = [
  "colored",
  "git2",
  "ptree",
+ "thiserror",
  "toml_edit",
 ]
 
@@ -323,6 +324,15 @@ version = "0.1.0"
 dependencies = [
  "aoch",
  "itertools",
+]
+
+[[package]]
+name = "day05"
+version = "0.1.0"
+dependencies = [
+ "aoch",
+ "itertools",
+ "thiserror",
 ]
 
 [[package]]
