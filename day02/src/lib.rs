@@ -37,9 +37,9 @@ struct BadDirection(String);
 #[derive(Error, Debug)]
 #[error("bad command")]
 enum BadCommand {
-	BadElementCount,
-	BadDirection(#[from] BadDirection),
-	BadNumber(#[from] ParseIntError),
+	ElementCount,
+	Direction(#[from] BadDirection),
+	Number(#[from] ParseIntError),
 }
 
 
@@ -54,7 +54,7 @@ impl FromStr for Command {
 					num.parse()?,
 				))
 			},
-			_ => Err(BadCommand::BadElementCount),
+			_ => Err(BadCommand::ElementCount),
 		}
     }
 }
@@ -74,7 +74,7 @@ impl FromStr for Direction {
 impl AoCDay for Day02 {
 	type Answer = isize;
 
-	fn day() -> u8 { 02 }
+	fn day() -> u8 { 2 }
 	fn name() -> &'static str { "Dive!" }
 
 	fn parse(input: &str) -> DayResult<Self> {

@@ -1,7 +1,6 @@
 use std::cmp::Ordering;
 use std::collections::HashMap;
 use std::fmt;
-use std::iter::{Map, Zip};
 use std::num::ParseIntError;
 use std::ops::Index;
 use std::str::FromStr;
@@ -50,7 +49,7 @@ impl Vent {
 	fn is_diagonal(&self) -> bool {
 		!(self.start.x == self.end.x || self.start.y == self.end.y)
 	}
-	fn points2(&self) -> Map<Zip<Box<dyn Iterator<Item = u16>>, Box<dyn Iterator<Item = u16>>>, fn((u16, u16)) -> Point> {
+	fn points2(&self) -> Box<dyn Iterator<Item = Point>> {
 		use Ordering::*;
 
 		let x_dir = self.start.x.cmp(&self.end.x);
@@ -71,7 +70,7 @@ impl Vent {
 		fn mapper((x, y): (u16, u16)) -> Point {
 			Point::new(x, y)
 		}
-		x.zip(y).map(mapper)
+		Box::new(x.zip(y).map(mapper))
 	}
 }
 
@@ -108,7 +107,7 @@ impl FromStr for Vent {
 impl AoCDay for Day05 {
 	type Answer = usize;
 
-	fn day() -> u8 { 05 }
+	fn day() -> u8 { 5 }
 	fn name() -> &'static str { "Hydrothermal Venture" }
 
 	fn parse(input: &str) -> DayResult<Self> {

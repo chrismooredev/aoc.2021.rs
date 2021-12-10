@@ -67,7 +67,7 @@ impl BitCriteria {
 impl AoCDay for Day03 {
 	type Answer = usize;
 
-	fn day() -> u8 { 03 }
+	fn day() -> u8 { 3 }
 	fn name() -> &'static str { "Binary Diagnostic" }
 
 	fn parse(input: &str) -> DayResult<Self> {
@@ -91,7 +91,7 @@ impl AoCDay for Day03 {
 		
 		Ok(Day03 {
 			words,
-			wordlen: wordlen,
+			wordlen,
 		})
 	}
 	fn part1(&mut self) -> DayResult<Self::Answer> {

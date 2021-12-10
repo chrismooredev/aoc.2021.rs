@@ -34,7 +34,7 @@ impl Day07 {
 		let (&min, &max) = self.positions.iter().minmax().into_option().unwrap();
 
 		(min..max)
-			.map(|n| f(&self, n))
+			.map(|n| f(self, n))
 			.min().unwrap() as usize
 	}
 }
@@ -42,7 +42,7 @@ impl Day07 {
 impl AoCDay for Day07 {
 	type Answer = usize;
 
-	fn day() -> u8 { 07 }
+	fn day() -> u8 { 7 }
 	fn name() -> &'static str { "The Treachery of Whales" }
 
 	fn parse(input: &str) -> DayResult<Self> {

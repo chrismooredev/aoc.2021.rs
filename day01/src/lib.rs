@@ -12,7 +12,7 @@ impl Day01 {
 impl AoCDay for Day01 {
 	type Answer = usize;
 
-	fn day() -> u8 { 01 }
+	fn day() -> u8 { 1 }
 	fn name() -> &'static str { "Sonar Sweep" }
 
 	fn parse(input: &str) -> DayResult<Self> {

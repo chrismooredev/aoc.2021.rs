@@ -22,7 +22,10 @@ struct Board {
 	nums: [(BoardNum, bool); 5*5],
 }
 impl Board {
-	fn insert(&mut self, num: BoardNum) -> bool {
+	/// Marks a tile as hit.
+	/// 
+	/// Returns true if this causes a bingo to be won
+	fn mark(&mut self, num: BoardNum) -> bool {
 		let pos = self.nums.iter()
 			.position(|n| n.0 == num);
 		
@@ -55,7 +58,7 @@ impl Board {
 impl AoCDay for Day04 {
 	type Answer = usize;
 
-	fn day() -> u8 { 04 }
+	fn day() -> u8 { 4 }
 	fn name() -> &'static str { "Giant Squid" }
 
 	fn parse(input: &str) -> DayResult<Self> {
@@ -64,7 +67,7 @@ impl AoCDay for Day04 {
 			.filter_map(aoch::parsing::trimmed);
 
 		let calls: Vec<BoardNum> = groups.next().expect("first group should be calls")
-			.split(",")
+			.split(',')
 			.map(str::parse)
 			.collect::<Result<_, ParseIntError>>()?;
 
@@ -95,7 +98,7 @@ impl AoCDay for Day04 {
 
 		for n in &self.calls {
 			for board in &mut self.boards {
-				if board.insert(*n) {
+				if board.mark(*n) {
 					return Ok(board.score() * (*n as usize));
 				}
 			}
@@ -108,15 +111,15 @@ impl AoCDay for Day04 {
 		let mut winner_order: Vec<usize> = Vec::with_capacity(boards_len);
 		for n in &self.calls {
 			for (i, board) in self.boards.iter_mut().enumerate() {
-				if ! winner_order.contains(&i) {
-					if board.insert(*n) {
+				if ! winner_order.contains(&i) && board.mark(*n) {
+					// if board.insert(*n) {
 						winner_order.push(i);
 
 						if winner_order.len() == boards_len {
 							// this board is the last to win
 							return Ok(board.score() * (*n as usize));
 						}
-					}
+					// }
 				}
 			}
 		}

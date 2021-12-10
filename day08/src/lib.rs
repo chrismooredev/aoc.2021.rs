@@ -8,6 +8,9 @@ use aoch::DayError;
 #[cfg(test)] #[allow(unused_imports)]
 use aoch::{DayPart, run_test, test_runner, daystr};
 
+/// Asserts that the number of bits in the second argument are set in the first argument.
+/// 
+/// If no second argument is supplied, the first argument name's length is used as the expected length.
 macro_rules! check_bits {
 	($var: ident, $exp: literal) => {
 		debug_assert!($var.count_ones() == $exp, "expected {} set bits for '{}', got {} ({:07b})", $exp, stringify!($var), $var.count_ones(), $var);
@@ -97,37 +100,36 @@ impl Signals {
 #[derive(Debug, thiserror::Error)]
 #[error("error validating signal input")]
 enum SignalValidationError {
-	BadLineFormat,
-	BadPatternLength,
-	BadOutputLength,
-	BadSignalLength,
+	LineFormat,
+	PatternLength,
+	OutputLength,
 }
 impl FromStr for Signals {
 	type Err = SignalValidationError;
 	// input validation
 	fn from_str(line: &str) -> Result<Self, Self::Err> {
 		// split into groups
-		let (patterns, output) = line.split_once(" | ").ok_or(SignalValidationError::BadLineFormat)?;
+		let (patterns, output) = line.split_once(" | ").ok_or(SignalValidationError::LineFormat)?;
 
 		// isolate each pattern, normalize by sorting chars
 		let patterns: [u8; 10] = patterns.split(' ')
 			.map(|s| {
 				s.chars()
-					.map(|c| c as u8 - 'a' as u8)
+					.map(|c| c as u8 - b'a')
 					.fold(0, |acc, c| acc | 1 << c)
 			})
 			.collect::<Vec<_>>()
 			.try_into()
-			.map_err(|_| SignalValidationError::BadPatternLength)?;
+			.map_err(|_| SignalValidationError::PatternLength)?;
 		let output: [u8; 4] = output.split(' ')
 			.map(|s| {
 				s.chars()
-					.map(|c| c as u8 - 'a' as u8)
+					.map(|c| c as u8 - b'a')
 					.fold(0, |acc, c| acc | 1 << c)
 			})
 			.collect::<Vec<_>>()
 			.try_into()
-			.map_err(|_| SignalValidationError::BadOutputLength)?;
+			.map_err(|_| SignalValidationError::OutputLength)?;
 
 		Ok(Signals {
 			patterns,
@@ -139,7 +141,7 @@ impl FromStr for Signals {
 impl AoCDay for Day08 {
 	type Answer = usize;
 
-	fn day() -> u8 { 08 }
+	fn day() -> u8 { 8 }
 	fn name() -> &'static str { "Seven Segment Search" }
 
 	fn parse(input: &str) -> DayResult<Self> {

@@ -36,7 +36,7 @@ impl Heightmap {
 	}
 	fn risk_level(&self, x: usize, y: usize) -> u8 {
 		// convert each ascii number to a regular 0-9 digit, add one
-		self.data[y*self.width + x] - ('0' as u8) + 1
+		self.data[y*self.width + x] - b'0' + 1
 	}
 
 	/// Returns an array of coordinates [top, bottom, right, left] that surround this tile
@@ -57,15 +57,14 @@ impl Heightmap {
 		let mut best = (x, y, self.get(x, y));
 
 		// 9s are not apart of a basin
-		if best.2 == '9' as u8 { return None; }
+		if best.2 == b'9' { return None; }
 
 		// get adjacents -> get their score -> compare with best, reloop if a better was found
 		while let Some((score, x, y)) = self.adjacents(best.0, best.1)
 			.into_iter()
-			.filter_map(identity)
+			.flatten()
 			.map(|(x, y)| (self.get(x, y), x, y))
-			.filter(|&(score, _, _)| score < best.2)
-			.next()
+			.find(|&(score, _, _)| score < best.2)
 		{
 			best = (x, y, score);
 		}
@@ -76,7 +75,7 @@ impl Heightmap {
 impl AoCDay for Day09 {
 	type Answer = usize;
 
-	fn day() -> u8 { 09 }
+	fn day() -> u8 { 9 }
 	fn name() -> &'static str { "Smoke Basin" }
 
 	fn parse(input: &str) -> DayResult<Self> {
@@ -116,7 +115,7 @@ impl AoCDay for Day09 {
 			});
 
 		// sum the three largest basin's sizes'
-		Ok(basins.values().sorted().rev().take(3).fold(1, |acc, size| acc*size))
+		Ok(basins.values().sorted().rev().take(3).product())
 	}
 }
 

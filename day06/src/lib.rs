@@ -82,7 +82,7 @@ impl FishField for FieldNaive {
 impl AoCDay for Day06 {
 	type Answer = usize;
 
-	fn day() -> u8 { 06 }
+	fn day() -> u8 { 6 }
 	fn name() -> &'static str { "Lanternfish" }
 
 	fn parse(input: &str) -> DayResult<Self> {
