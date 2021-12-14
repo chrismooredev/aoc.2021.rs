@@ -32,6 +32,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "ascii"
+version = "1.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "bbf56136a5198c7b01a49e3afcbef6cf84597273d298f54432926024107b0109"
+
+[[package]]
 name = "atty"
 version = "0.2.14"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -47,6 +53,12 @@ name = "autocfg"
 version = "1.0.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "cdb031dd78e28731d87d56cc8ffef4a8f36ca26c38fe2de700543e627f8a464a"
+
+[[package]]
+name = "bimap"
+version = "0.6.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "50ae17cabbc8a38a1e3e4c1a6a664e9a09672dc14d0896fa8d865d3a5a446b07"
 
 [[package]]
 name = "cfg-if"
@@ -171,6 +183,17 @@ name = "day11"
 version = "0.1.0"
 dependencies = [
  "aoch",
+ "itertools",
+ "thiserror",
+]
+
+[[package]]
+name = "day12"
+version = "0.1.0"
+dependencies = [
+ "aoch",
+ "ascii",
+ "bimap",
  "itertools",
  "thiserror",
 ]
