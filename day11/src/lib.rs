@@ -117,7 +117,7 @@ impl AoCDay for Day11 {
 		Ok(Day11 { cavern: Cavern { step: 0, octopi: nums.try_into().unwrap() }})
 	}
 	fn part1(&mut self) -> DayResult<Self::Answer> {
-		let mut cavern = self.cavern.clone();
+		let mut cavern = self.cavern;
 		let mut flashes = 0;
 		for _ in 0..100 {
 			flashes += cavern.step();
@@ -125,7 +125,7 @@ impl AoCDay for Day11 {
 		Ok(flashes)
 	}
 	fn part2(&mut self) -> DayResult<Self::Answer> {
-		let mut cavern = self.cavern.clone();
+		let mut cavern = self.cavern;
 		loop {
 			let flashed = cavern.step();
 			if flashed == cavern.octopi.len() {

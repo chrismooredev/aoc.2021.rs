@@ -89,7 +89,6 @@ impl CavernPoolBuilder {
 	pub fn build(self) -> CavernPool {
 		CavernPool {
 			cave_map: self.cave_map.into_iter()
-				.map(|(s, b)| (s.to_owned(), b))
 				.collect(),
 			caves: self.caves,
 		}
@@ -166,7 +165,7 @@ impl AoCDay for Day12 {
 				
 		eprintln!("tunnels:");
 		caverns.caves.iter().enumerate()
-			.filter(|(_, c)| c.connected.len() > 0)
+			.filter(|(_, c)| !c.connected.is_empty())
 			.for_each(|(i, c)| {
 				let src = caverns.cave_map.get_by_right(&(i as u8)).unwrap();
 				let dsts = caverns.path_string(c.connected.iter().copied());

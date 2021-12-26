@@ -1,8 +1,8 @@
 #![feature(int_abs_diff)]
+#![allow(clippy::type_complexity)]
 
 use std::collections::hash_map::DefaultHasher;
 use std::collections::{HashMap, HashSet};
-use std::convert::identity;
 use std::hash::Hasher;
 use std::ops::{Neg, self};
 use std::fmt;
@@ -212,6 +212,7 @@ impl CoordinateMap {
 
 #[derive(Debug, Clone, Copy, Hash, PartialEq, Eq, PartialOrd, Ord, IntoPrimitive, TryFromPrimitive)]
 #[repr(usize)]
+#[allow(clippy::upper_case_acronyms)]
 enum AxisMapping {
 	XYZ,
 	XZY,
@@ -362,8 +363,8 @@ impl RawScanner {
 				// point offset after translation
 				let offsets: HashSet<Difference> = point_pairs.iter()
 					.map(|(sp, rp)| {
-						let self_dists = &self.distances.get(&sp).unwrap()[..breadth];
-						let refe_dists = &other.normal_distances.get(&rp).unwrap()[..breadth];
+						let self_dists = &self.distances.get(sp).unwrap()[..breadth];
+						let refe_dists = &other.normal_distances.get(rp).unwrap()[..breadth];
 
 						// test this coordinate map, and compute point offsets
 						let mut valid_offsets = self_dists.iter().zip(refe_dists)
@@ -468,7 +469,7 @@ impl RawScanner {
 					.copied()
 					.map(|dst| {
 						let ad = src.abs_diff(&dst);
-						let mut axis = *&ad.0;
+						let mut axis = ad.0;
 						axis.sort_unstable();
 						(ad.sum(), axis, src.diff(&dst), dst)
 					})
@@ -579,16 +580,15 @@ impl Day19 {
 			.count();
 
 
-		// if connected.edge_count() > 0 {
-		// 	let name = format!("day19_bounds{}.dot", hash_breadth);
-		// 	let dot = Dot::new(&connected); //, &[Config::EdgeNoLabel, Config::NodeIndexLabel]);
-		// 	if let Err(e) = std::fs::write(&name, dot.to_string()) {
-		// 		eprintln!("[B={}] failed writing scanner graph to disk: {:?}", hash_breadth, e);
-		// 	} else {
-		// 		eprintln!("[B={}] wrote scanner graph to disk", hash_breadth);
-		// 	}
-			
-		// }
+		if connected.edge_count() > 0 {
+			let name = format!("day19_bounds{}.dot", hash_breadth);
+			let dot = Dot::new(&connected); //, &[Config::EdgeNoLabel, Config::NodeIndexLabel]);
+			if let Err(e) = std::fs::write(&name, dot.to_string()) {
+				eprintln!("[B={}] failed writing scanner graph to disk: {:?}", hash_breadth, e);
+			} else {
+				eprintln!("[B={}] wrote scanner graph to disk", hash_breadth);
+			}
+		}
 
 		if reachable == 0 { return None; }
 		// eprintln!(
@@ -637,7 +637,7 @@ impl Day19 {
 
 				// Find a graph of connected scanners that we can walk through
 				// use common hashes of points to identify common scanners
-				let (graph, node_idxs) = match Day19::graph_scanners(&raw_scanners, pb, REQUIRED_COMMON_POINTS) {
+				let (graph, node_idxs) = match Day19::graph_scanners(raw_scanners, pb, REQUIRED_COMMON_POINTS) {
 					None => {
 						eprintln!("[B={}] SKIPPING -- could not form continuous graph", pb);
 						continue;
@@ -693,7 +693,7 @@ impl Day19 {
 				}
 
 				let normalized: Vec<Scanner> = mapped.into_iter()
-					.filter_map(identity)
+					.flatten()
 					.collect();
 				assert_eq!(self.raw_scanners.len(), normalized.len());
 
@@ -732,7 +732,7 @@ impl AoCDay for Day19 {
 							.collect::<Vec<isize>>()
 							.try_into().unwrap()
 					})
-					.map(|a| Point(a))
+					.map(Point)
 					.collect();
 				
 				RawScanner::new(idx, raw)

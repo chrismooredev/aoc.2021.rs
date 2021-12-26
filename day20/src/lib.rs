@@ -276,7 +276,7 @@ impl ImageVector {
 			let newy = origy.checked_sub(2)?;
 			Some(newy*width + newx)
 		}
-		fn smol2big(i: usize, width: usize) -> usize {
+		fn _smol2big(i: usize, width: usize) -> usize {
 			let origx = i % width;
 			let origy = i / width;
 			let newx = origx + 2;
@@ -284,7 +284,7 @@ impl ImageVector {
 			newy*(width+4) + newx
 		}
 
-		let adj_ind = ImageVector::adjacencies_n(big_around, self.width+4, self.height+4)
+		ImageVector::adjacencies_n(big_around, self.width+4, self.height+4)
 			.into_iter()
 			.rev().enumerate()
 			.map(|(i, bind_opt)| {
@@ -301,9 +301,7 @@ impl ImageVector {
 					acc |= 1 << i;
 				}
 				acc
-			});
-
-		adj_ind
+			})
 	}
 	fn adjacencies_n(around: usize, width: usize, height: usize) -> [Option<usize>; 9] {
 		let top = (around/width < height - 1).then(|| around + width);
@@ -341,10 +339,10 @@ impl AoCDay for Day20 {
 	fn parse(input: &str) -> DayResult<Self> {
 		let mut lines = input.lines()
 			.map(str::trim)
-			.skip_while(|s| s.len() == 0)
+			.skip_while(|s| s.is_empty())
 			.collect_vec();
 		
-		let empty = lines.iter().position(|s| *s == "")
+		let empty = lines.iter().position(|s| s.is_empty())
 			.expect("input should have empty separating line");
 		
 		// eprintln!("lines: {:?}", lines);
@@ -364,7 +362,7 @@ impl AoCDay for Day20 {
 			panic!("algorithm should be 512 chars long, got {} chars", algo_len)
 		});
 
-		assert!(img.len() > 0, "image has no data");
+		assert!(!img.is_empty(), "image has no data");
 		let image_width = img[0].len();
 		let image = img.iter().copied()
 			.inspect(|s| assert_eq!(image_width, s.len(), "image does not have constant length"))
