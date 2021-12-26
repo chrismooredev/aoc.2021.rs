@@ -330,7 +330,7 @@ impl RawScanner {
 	fn normalize_to(&self, other: &Scanner, breadth: usize) -> Scanner {
 		// find a way to map the coordinates
 
-		eprintln!("attempting to normalize {} to {}", self.idx, other.idx);
+		// eprintln!("attempting to normalize {} to {}", self.idx, other.idx);
 
 		// our current, raw hash -> point map
 		let self_hash: HashMap<u64, Point> = self.raw.iter()
@@ -404,7 +404,7 @@ impl RawScanner {
 			})
 			.collect::<Vec<_>>();
 
-		eprintln!("possible transformations: {:?}", possible_axis_transforms);
+		// eprintln!("possible transformations: {:?}", possible_axis_transforms);
 		assert_eq!(1, possible_axis_transforms.len(), "more than one possible axis transforms!");
 		let (coordmap, offset) = possible_axis_transforms[0];
 		let translation = PointTranslation::new(coordmap, offset);
@@ -579,22 +579,22 @@ impl Day19 {
 			.count();
 
 
-		if connected.edge_count() > 0 {
-			let name = format!("day19_bounds{}.dot", hash_breadth);
-			let dot = Dot::new(&connected); //, &[Config::EdgeNoLabel, Config::NodeIndexLabel]);
-			if let Err(e) = std::fs::write(&name, dot.to_string()) {
-				eprintln!("[B={}] failed writing scanner graph to disk: {:?}", hash_breadth, e);
-			} else {
-				eprintln!("[B={}] wrote scanner graph to disk", hash_breadth);
-			}
+		// if connected.edge_count() > 0 {
+		// 	let name = format!("day19_bounds{}.dot", hash_breadth);
+		// 	let dot = Dot::new(&connected); //, &[Config::EdgeNoLabel, Config::NodeIndexLabel]);
+		// 	if let Err(e) = std::fs::write(&name, dot.to_string()) {
+		// 		eprintln!("[B={}] failed writing scanner graph to disk: {:?}", hash_breadth, e);
+		// 	} else {
+		// 		eprintln!("[B={}] wrote scanner graph to disk", hash_breadth);
+		// 	}
 			
-		}
+		// }
 
 		if reachable == 0 { return None; }
-		eprintln!(
-			"[B={}] reachable scanners from scanner 0: {} (total nodes={}, total scanners={})",
-			hash_breadth, reachable, connected.node_count(), raw_scanners.len()
-		);
+		// eprintln!(
+		// 	"[B={}] reachable scanners from scanner 0: {} (total nodes={}, total scanners={})",
+		// 	hash_breadth, reachable, connected.node_count(), raw_scanners.len()
+		// );
 		if reachable != raw_scanners.len() { return None; }
 
 		let node_idxs = node_idxs.iter()
@@ -633,7 +633,7 @@ impl Day19 {
 					}
 				}
 
-				eprintln!("[B={}] all point hashes unique per scanner", pb);
+				// eprintln!("[B={}] all point hashes unique per scanner", pb);
 
 				// Find a graph of connected scanners that we can walk through
 				// use common hashes of points to identify common scanners
@@ -645,7 +645,7 @@ impl Day19 {
 					Some(s) => s,
 				};
 
-				eprintln!("[B={}] continuous scanner graph found", pb);
+				// eprintln!("[B={}] continuous scanner graph found", pb);
 
 				let try_as_raw = |idx: NodeIndex| -> Option<(usize, &RawScanner)> {
 					node_idxs.iter()
@@ -697,7 +697,7 @@ impl Day19 {
 					.collect();
 				assert_eq!(self.raw_scanners.len(), normalized.len());
 
-				eprintln!("normalized all scanners");
+				// eprintln!("normalized all scanners");
 
 				return (normalized, graph, node_idxs);
 			}
