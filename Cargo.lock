@@ -326,6 +326,24 @@ dependencies = [
 ]
 
 [[package]]
+name = "day20"
+version = "0.1.0"
+dependencies = [
+ "aoch",
+ "itertools",
+ "thiserror",
+]
+
+[[package]]
+name = "day21"
+version = "0.1.0"
+dependencies = [
+ "aoch",
+ "itertools",
+ "thiserror",
+]
+
+[[package]]
 name = "derivative"
 version = "2.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
