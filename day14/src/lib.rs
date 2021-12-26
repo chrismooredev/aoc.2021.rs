@@ -111,6 +111,7 @@ impl PolyChain for AbstractPolymerChain {
 		let opairs = self.pairs;
 		let mut npairs = [0; 26*26];
 
+		#[allow(clippy::needless_range_loop)]
 		for i in 0..26*26 {
 			let a = i/26;
 			let b = i%26;
